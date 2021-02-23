@@ -20,12 +20,17 @@ function producteImage(name, source) {
     this.shown = 0;
     producteImage.allImages.push(this);
     producteName.push(name);
-    // settingIteam();
+
+    
 }
 
 // console.log('names', producteName);
 producteImage.allImages = [];
 
+
+if(localStorage.getItem('voteStorage')){
+    producteImage.allImages= JSON.parse(localStorage.getItem('voteStorage'))
+}else{
 new producteImage('bag', 'images/bag.jpg');
 new producteImage('banana', 'images/banana.jpg');
 new producteImage('bathroom', 'images/bathroom.jpg');
@@ -45,7 +50,9 @@ new producteImage('usb', 'images/sb.gif');
 new producteImage('water-can', 'images/water-can.jpg');
 new producteImage('wine-glass', 'images/wine-glass.jpg');
 
-console.log(producteImage.allImages);
+}console.log(producteImage.allImages);
+
+
 
 function generateRandomIndex() {
     return Math.floor(Math.random() * producteImage.allImages.length);
@@ -83,7 +90,8 @@ function renderThreeImages() {
 
 
 renderThreeImages();
-
+let button = document.getElementById('result');
+button.addEventListener('click', viewList)
 
 fristImageElement.addEventListener('click', handleUserClick);
 secondImageElement.addEventListener('click', handleUserClick);
@@ -112,35 +120,40 @@ function handleUserClick(event) {
     }
     else {
 
-        let button = document.getElementById('result');
-
-        let producteResult;
-        for (let i = 0; i < producteImage.allImages.length; i++) {
-            producteResult = document.createElement('li');
-           button.appendChild(producteResult);
-            producteResult.textContent = producteImage.allImages[i].name + ' has ' + producteImage.allImages[i].votes + ' votes';
+        button.className = '';
 
 
-        }
 
 
         fristImageElement.removeEventListener('click', handleUserClick);
         secondImageElement.removeEventListener('click', handleUserClick);
         thiredImageElement.removeEventListener('click', handleUserClick);
 
+
         for (let i = 0; i < producteImage.allImages.length; i++) {
 
             producteVote.push(producteImage.allImages[i].votes);
 
-            producteshown.push(producteImage.allImages[i].shown);
+
         }
+
         viewChart();
+        localStorage.setItem('voteStorage', JSON.stringify(producteImage.allImages))
 
     }
 }
-let numbers=[1,2,3,4]
-console.log(numbers[2]);
 
+function viewList() {
+    let producteResult;
+    for (let i = 0; i < producteImage.allImages.length; i++) {
+        producteResult = document.createElement('li');
+        button.appendChild(producteResult);
+        producteResult.textContent = producteImage.allImages[i].name + ' has ' + producteImage.allImages[i].votes + ' votes and it was shown  ' + producteImage.allImages[i].shown;
+
+    }
+
+    button.removeEventListener('click', viewList);
+}
 
 function viewChart() {
 
@@ -179,15 +192,12 @@ function viewChart() {
 
         options: {}
     });
-    console.log(producteVote , 'hello');
+    console.log(producteVote, 'hello');
 
 
 
 }
 
-// function settingIteam()
-// {
-//     let data = 
-// }
+
 
 
