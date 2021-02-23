@@ -20,8 +20,10 @@ function producteImage(name, source) {
     this.shown = 0;
     producteImage.allImages.push(this);
     producteName.push(name);
+    // settingIteam();
 }
 
+// console.log('names', producteName);
 producteImage.allImages = [];
 
 new producteImage('bag', 'images/bag.jpg');
@@ -48,7 +50,7 @@ console.log(producteImage.allImages);
 function generateRandomIndex() {
     return Math.floor(Math.random() * producteImage.allImages.length);
 }
-console.log(Math.floor(Math.random() * producteImage.allImages.length));
+// console.log(Math.floor(Math.random() * producteImage.allImages.length));
 
 
 function renderThreeImages() {
@@ -66,12 +68,15 @@ function renderThreeImages() {
 
     fristImageElement.src = producteImage.allImages[fristImageIndex].source;
     producteImage.allImages[fristImageIndex].shown++;
+    producteshown.push(producteImage.allImages[fristImageIndex].shown)
 
     secondImageElement.src = producteImage.allImages[secondImageIndex].source;
     producteImage.allImages[secondImageIndex].shown++;
+    producteshown.push(producteImage.allImages[secondImageIndex].shown)
 
     thiredImageElement.src = producteImage.allImages[thiredImageIndex].source;
     producteImage.allImages[thiredImageIndex].shown++;
+    producteshown.push(producteImage.allImages[thiredImageIndex].shown)
 
 }
 
@@ -107,16 +112,16 @@ function handleUserClick(event) {
     }
     else {
 
-        // let bottun = document.getElementById('result');
+        let button = document.getElementById('result');
 
-        // let producteResult;
-        // for (let i = 0; i < producteImage.allImages.length; i++) {
-        //     producteResult = document.createElement('li');
-        //     bottun.appendChild(producteResult);
-        //     producteResult.textContent = producteImage.allImages[i].name + ' has ' + producteImage.allImages[i].votes + ' votes';
+        let producteResult;
+        for (let i = 0; i < producteImage.allImages.length; i++) {
+            producteResult = document.createElement('li');
+           button.appendChild(producteResult);
+            producteResult.textContent = producteImage.allImages[i].name + ' has ' + producteImage.allImages[i].votes + ' votes';
 
 
-        // }
+        }
 
 
         fristImageElement.removeEventListener('click', handleUserClick);
@@ -124,16 +129,17 @@ function handleUserClick(event) {
         thiredImageElement.removeEventListener('click', handleUserClick);
 
         for (let i = 0; i < producteImage.allImages.length; i++) {
-            
-            producteVote.push(producteImage.allImages.votes);
 
-            producteshown.push(producteImage.allImages.shown);
+            producteVote.push(producteImage.allImages[i].votes);
+
+            producteshown.push(producteImage.allImages[i].shown);
         }
         viewChart();
 
     }
 }
-
+let numbers=[1,2,3,4]
+console.log(numbers[2]);
 
 
 function viewChart() {
@@ -141,10 +147,10 @@ function viewChart() {
     let ctx = document.getElementById('myChart').getContext('2d');
 
     let chart = new Chart(ctx, {
-        
+
         type: 'bar',
 
-       
+
         data: {
             labels: producteName,
 
@@ -168,17 +174,20 @@ function viewChart() {
 
             ]
         },
-         
 
-        
+
+
         options: {}
     });
-    console.log(chart);
+    console.log(producteVote , 'hello');
 
-    // Chart(ctx,{})
+
 
 }
 
-// viewChart();
+// function settingIteam()
+// {
+//     let data = 
+// }
 
 
