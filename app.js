@@ -20,17 +20,30 @@ function producteImage(name, source) {
     this.shown = 0;
     producteImage.allImages.push(this);
     producteName.push(name);
-
-    
+ 
+   
 }
 
-// console.log('names', producteName);
 producteImage.allImages = [];
 
+function setItems() {
+    let stringObject= JSON.stringify(producteImage.allImages)
+    localStorage.setItem('items',stringObject)
+}
+function getItems() {
+  
+    
+    let data=JSON.parse(  localStorage.getItem('items'));
 
-if(localStorage.getItem('voteStorage')){
-    producteImage.allImages= JSON.parse(localStorage.getItem('voteStorage'))
-}else{
+     if (data!==null) {
+         console.log('dataaaaa',data);
+        producteImage.allImages=data
+
+         
+      
+     }
+}
+
 new producteImage('bag', 'images/bag.jpg');
 new producteImage('banana', 'images/banana.jpg');
 new producteImage('bathroom', 'images/bathroom.jpg');
@@ -50,14 +63,16 @@ new producteImage('usb', 'images/sb.gif');
 new producteImage('water-can', 'images/water-can.jpg');
 new producteImage('wine-glass', 'images/wine-glass.jpg');
 
-}console.log(producteImage.allImages);
+console.log(producteImage.allImages);
+
+
 
 
 
 function generateRandomIndex() {
     return Math.floor(Math.random() * producteImage.allImages.length);
 }
-// console.log(Math.floor(Math.random() * producteImage.allImages.length));
+
 
 
 function renderThreeImages() {
@@ -69,27 +84,26 @@ function renderThreeImages() {
         secondImageIndex = generateRandomIndex();
         thiredImageIndex = generateRandomIndex();
     } while (fristImageIndex === secondImageIndex || fristImageIndex === thiredImageIndex || secondImageIndex === thiredImageIndex)
-    producteImage.allImages
 
-    console.log(producteImage.allImages[fristImageIndex, secondImageIndex, thiredImageIndex]);
-
+  
     fristImageElement.src = producteImage.allImages[fristImageIndex].source;
     producteImage.allImages[fristImageIndex].shown++;
-    producteshown.push(producteImage.allImages[fristImageIndex].shown)
+   
 
     secondImageElement.src = producteImage.allImages[secondImageIndex].source;
     producteImage.allImages[secondImageIndex].shown++;
-    producteshown.push(producteImage.allImages[secondImageIndex].shown)
+   
 
     thiredImageElement.src = producteImage.allImages[thiredImageIndex].source;
     producteImage.allImages[thiredImageIndex].shown++;
-    producteshown.push(producteImage.allImages[thiredImageIndex].shown)
-
+   
 }
 
-
+getItems();
+console.log('after get item',producteImage.allImages);
 
 renderThreeImages();
+console.log('vote shown before clicking,',producteshown);
 let button = document.getElementById('result');
 button.addEventListener('click', viewList)
 
@@ -107,20 +121,37 @@ function handleUserClick(event) {
 
         if (event.target.id === 'frist-image') {
             producteImage.allImages[fristImageIndex].votes++
+            
+            setItems();
+
+
 
         } else if (event.target.id === 'second-image') {
             producteImage.allImages[secondImageIndex].votes++
-
+            setItems();
+            
         } else {
             producteImage.allImages[thiredImageIndex].votes++
+            setItems();
+            
         }
+       
+        
 
 
         renderThreeImages();
+        // viewChart();
     }
     else {
 
         button.className = '';
+        // product
+        for (let i = 0; i < producteImage.allImages.length; i++) {
+           producteVote.push( producteImage.allImages[i].votes);
+           producteshown.push( producteImage.allImages[i].shown);
+
+            
+        }
 
 
 
@@ -130,15 +161,10 @@ function handleUserClick(event) {
         thiredImageElement.removeEventListener('click', handleUserClick);
 
 
-        for (let i = 0; i < producteImage.allImages.length; i++) {
+      
 
-            producteVote.push(producteImage.allImages[i].votes);
-
-
-        }
 
         viewChart();
-        localStorage.setItem('voteStorage', JSON.stringify(producteImage.allImages))
 
     }
 }
@@ -149,55 +175,51 @@ function viewList() {
         producteResult = document.createElement('li');
         button.appendChild(producteResult);
         producteResult.textContent = producteImage.allImages[i].name + ' has ' + producteImage.allImages[i].votes + ' votes and it was shown  ' + producteImage.allImages[i].shown;
+      
+        producteVote.push(producteImage.allImages[i].votes);
+        producteVote.push(producteImage.allImages[i].shown);
 
     }
 
     button.removeEventListener('click', viewList);
 }
 
+console.log('outside', producteshown);
+
 function viewChart() {
-
-    let ctx = document.getElementById('myChart').getContext('2d');
-
-    let chart = new Chart(ctx, {
-
+    console.log('inside', producteVote);
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+       
         type: 'bar',
-
 
         data: {
             labels: producteName,
-
             datasets: [
 
 
                 {
-                    label: 'producte votes',
-                    backgroundColor: '#1e212d',
-                    borderColor: '#1e212d',
+                    label: 'votes',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
                     data: producteVote
-                },
-
-                {
-                    label: 'producte shown',
-                    backgroundColor: 'blue',
-                    borderColor: 'blue',
+                }, {
+                    label: 'shown',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
                     data: producteshown
-                },
+                }
 
 
             ]
         },
 
-
-
+       
         options: {}
     });
-    console.log(producteVote, 'hello');
-
-
-
+    console.log('yppppp', producteshown);
+    console.log('lllllllllll', producteVote);
 }
-
 
 
 

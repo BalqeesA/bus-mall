@@ -1,11 +1,29 @@
+body{
+    
+    
 
+    margin: auto;
+    
+    background-color: rgb(143, 148, 214);
+    width: 700px; 
+    height: 900px
+    
+    
+}
 
 .hidden{
     display: none;
 }
 .all{
     float: left;
-    width:  100px;
-    height: 100px;
+    width:  200px;
+    height: 300px;
     object-fit: cover;
+}
+h1{
+
+    padding: auto;
+    position: relative;
+    top: 25px;
+    left: 60px;
 }
