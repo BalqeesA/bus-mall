@@ -9,12 +9,17 @@ let userAttemptsCounter = 0;
 let fristImageIndex;
 let secondImageIndex;
 let thiredImageIndex;
+let producteName = [];
+let producteVote = [];
+let producteshown = [];
 
 function producteImage(name, source) {
     this.name = name;
     this.source = source;
     this.votes = 0;
+    this.shown = 0;
     producteImage.allImages.push(this);
+    producteName.push(name);
 }
 
 producteImage.allImages = [];
@@ -60,10 +65,13 @@ function renderThreeImages() {
     console.log(producteImage.allImages[fristImageIndex, secondImageIndex, thiredImageIndex]);
 
     fristImageElement.src = producteImage.allImages[fristImageIndex].source;
+    producteImage.allImages[fristImageIndex].shown++;
 
     secondImageElement.src = producteImage.allImages[secondImageIndex].source;
+    producteImage.allImages[secondImageIndex].shown++;
 
     thiredImageElement.src = producteImage.allImages[thiredImageIndex].source;
+    producteImage.allImages[thiredImageIndex].shown++;
 
 }
 
@@ -82,7 +90,7 @@ function handleUserClick(event) {
 
     console.log(event.target.id);
 
-    if (userAttemptsCounter < maxAttempts) {
+    if (userAttemptsCounter <= maxAttempts) {
 
         if (event.target.id === 'frist-image') {
             producteImage.allImages[fristImageIndex].votes++
@@ -99,42 +107,78 @@ function handleUserClick(event) {
     }
     else {
 
-        let bottun = document.getElementById('result');
-        
-        let producteResult;
-        for (let i = 0; i < producteImage.allImages.length; i++) {
-            producteResult = document.createElement('li');
-            bottun.appendChild(producteResult);
-            producteResult.textContent = producteImage.allImages[i].name + ' has ' + producteImage.allImages[i].votes + ' votes';
-            
+        // let bottun = document.getElementById('result');
 
-        }
-    
+        // let producteResult;
+        // for (let i = 0; i < producteImage.allImages.length; i++) {
+        //     producteResult = document.createElement('li');
+        //     bottun.appendChild(producteResult);
+        //     producteResult.textContent = producteImage.allImages[i].name + ' has ' + producteImage.allImages[i].votes + ' votes';
+
+
+        // }
+
 
         fristImageElement.removeEventListener('click', handleUserClick);
         secondImageElement.removeEventListener('click', handleUserClick);
         thiredImageElement.removeEventListener('click', handleUserClick);
 
+        for (let i = 0; i < producteImage.allImages.length; i++) {
+            
+            producteVote.push(producteImage.allImages.votes);
+
+            producteshown.push(producteImage.allImages.shown);
+        }
+        viewChart();
+
     }
 }
 
-// let bottun = document.getElementById('result');
-// let producteResult= document.createElement('bottun');
-
-//     // producteResult 
-//     bottun.appendChild(producteResult);
-//     producteResult.textContent = producteImage.allImages.name + ' has ' + producteImage.allImages.votes + ' votes';
 
 
-// bottun.onclick = function () {
+function viewChart() {
 
-//     bottun.addEventListener("click",producteResult());
-//     // producteResult = document.createElement('li');
-//     bottun.appendChild(producteResult);
+    let ctx = document.getElementById('myChart').getContext('2d');
 
-//  }
+    let chart = new Chart(ctx, {
+        
+        type: 'bar',
+
+       
+        data: {
+            labels: producteName,
+
+            datasets: [
 
 
+                {
+                    label: 'producte votes',
+                    backgroundColor: '#1e212d',
+                    borderColor: '#1e212d',
+                    data: producteVote
+                },
 
+                {
+                    label: 'producte shown',
+                    backgroundColor: 'blue',
+                    borderColor: 'blue',
+                    data: producteshown
+                },
+
+
+            ]
+        },
+         
+
+        
+        options: {}
+    });
+    console.log(chart);
+
+    // Chart(ctx,{})
+
+}
+
+// viewChart();
 
 
